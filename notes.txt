@@ -1,0 +1,11 @@
+Appli qui calcule le nombre d'heures pour Sasha ce bouffon
+
+En gros, tu encodes une journée, tu mets l'heure de démarrage, l'heure de fin, si y a déjeuner ou dîner.
+
+On doit pouvoir modifier et supprimer un jour.
+
+Étape suivante : faire un calendrier pour la feuille de chômage de l'autre débile.
+
+Donc, liste déroulante pour chaque jour avec jour chômage ou maladie ou vacances.
+
+Système de connexion ? ou alors localStorage pour chaque utilisateur -> se renseigner
