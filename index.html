@@ -7,37 +7,16 @@
     <script src='script.js' defer></script>
 </head>
 <body>
-    <div id="main">
-        <table id="tab">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Démarrage</th>
-                    <th>Fin</th>
-                </tr>
-            </thead>
-            <tbody id="tab-content">
-                
-            </tbody>
+    <div id="selection">
+        <input type="date" id="date">
+        <label for="begin">Démarrage : </label>
+        <input type="time" id="begin">
+        <label for="end">Fin : </label>
+        <input type="time" id="end">
+    </div>
 
-            <tfoot>
-                <tr>
-                    <form id="form">
-                        <td>
-
-                        </td>
-                        <td>
-                            <input type="number" id="begin">
-                        </td>
-                        <td>
-                            <input type="number" id="end">
-                        </td>
-                    </form>
-                </tr>
-            </tfoot>
-        </table>
-
-        <button id="Add">Ajouter</button>
+    <div id="content">
+        <h2 id="currDate"></h2>
     </div>
 </body>
 </html>
