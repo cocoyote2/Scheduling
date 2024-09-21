@@ -5,6 +5,11 @@ let chosenDate;
 //localStorage.clear();
 
 calendar.addEventListener("change", () => {
+    let beginHour = document.getElementById("begin");
+    let endHour = document.getElementById("end");
+    beginHour.value = "00:00";
+    endHour.value = "00:00";
+
     let date = new Date(calendar.value);
     chosenDate = date.toLocaleDateString();
 
@@ -28,6 +33,10 @@ submitButton.addEventListener("click", () => {
     jsonContent = JSON.stringify(shift);
 
     localStorage.setItem(chosenDate, jsonContent);
+
+    let content = JSON.parse(localStorage.getItem(chosenDate));
+
+    PrintContent(content);
 });
 
 function PrintContent(content) {
@@ -39,8 +48,11 @@ function PrintContent(content) {
     let sumMinutes = CalculateSumHours(FindLocalItems(regex)).sumMinutes
     let str = sumHours + " Heures et " + sumMinutes + " minute(s) pour le mois" 
 
-    startHour.value = content.beginHour;
-    finishHour.value = content.endHour;
+    if(content != null){
+        startHour.value = content.beginHour;
+        finishHour.value = content.endHour;
+    }
+
     nbHoursOfMonth.innerHTML = str;
 }
 

@@ -1,11 +1,75 @@
-body{
+/* Style général */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 50px;
-} 
-
-input{
-    width: 150px;
+    height: 100vh;
+    flex-direction: column; /* Ajouté pour disposer verticalement */
+    color: #333;
 }
 
+#selection {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+    width: 100%;
+}
+
+#selection label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#selection input[type="date"],
+#selection input[type="time"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+#selection input[type="date"]:focus,
+#selection input[type="time"]:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+}
+
+button#add {
+    padding: 10px 20px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button#add:hover {
+    background-color: #005bb5;
+}
+
+#content {
+    margin-top: 40px; /* Augmente la marge pour plus d'espace */
+    text-align: center;
+    font-size: 18px;
+    color: #0066cc;
+}
+
+#nbHoursOfMonth {
+    font-size: 24px;
+    font-weight: bold;
+}
