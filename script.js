@@ -23,11 +23,13 @@ calendar.addEventListener("change", () => {
 submitButton.addEventListener("click", () => {
     let startHour = document.getElementById("begin").value;
     let finishHour = document.getElementById("end").value;
+    let lunch = document.getElementById("lunch").checked;
+    let dinner = document.getElementById("dinner").checked;
 
     let shift = {
         beginHour: startHour,
         endHour: finishHour,
-        nbHours: TimeDifference(startHour, finishHour)
+        nbHours: TimeDifference(startHour, finishHour, lunch, dinner)
     }
 
     jsonContent = JSON.stringify(shift);
@@ -69,10 +71,24 @@ function FindLocalItems (query) {
     return results;
 }
 
-function TimeDifference(startTime, endTime) {
+function TimeDifference(startTime, endTime, lunch, dinner) {
     // Convertir les heures en objets Date
     const start = new Date(`1970-01-01T${startTime}:00`);
     const end = new Date(`1970-01-01T${endTime}:00`);
+    let pauseDuration = 0;
+
+    //Déterminer la durée de pause
+    if(lunch && dinner){
+        pauseDuration  = 45;
+    }
+    else if(lunch){
+        pauseDuration = 15;
+    }
+    else if(dinner){
+        pauseDuration = 30;
+    }
+
+    console.log(pauseDuration);
 
     // Calculer la différence en millisecondes
     let diff = end - start;
@@ -83,7 +99,7 @@ function TimeDifference(startTime, endTime) {
     }
 
     // Convertir la différence en minutes
-    const diffInMinutes = Math.floor(diff / (1000 * 60));
+    const diffInMinutes = Math.floor(diff / (1000 * 60)) - pauseDuration;
 
     // Extraire les heures et minutes
     const hours = Math.floor(diffInMinutes / 60);
