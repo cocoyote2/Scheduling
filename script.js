@@ -143,4 +143,5 @@ function createDateRegex(chosenDate) {
     return regex;
 }
 
-//TODO : ajouter les fonctionnalités de pause (déjeuner et dîner) et enlever les minutes correspondantes à la somme (clc yoma)
+//TODO : 2 select avec mois et année et afficher le nombre d'heures sur le mois et l'année sélectionnés
+//IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé.
