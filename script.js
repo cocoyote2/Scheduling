@@ -1,12 +1,15 @@
-let calendar = document.getElementById("date");
-let submitButton = document.getElementById("add");
+const calendar = document.getElementById("date");
+const submitButton = document.getElementById("add");
+const beginHour = document.getElementById("begin");
+const endHour = document.getElementById("end");
+const startHour = document.getElementById("begin");
+const finishHour = document.getElementById("end");
+const nbHoursOfMonth = document.getElementById("nbHoursOfMonth");
 let chosenDate;
 
 //localStorage.clear();
 
 calendar.addEventListener("change", () => {
-    let beginHour = document.getElementById("begin");
-    let endHour = document.getElementById("end");
     beginHour.value = "00:00";
     endHour.value = "00:00";
 
@@ -42,15 +45,12 @@ submitButton.addEventListener("click", () => {
 });
 
 function PrintContent(content) {
-    let startHour = document.getElementById("begin");
-    let finishHour = document.getElementById("end");
-    let nbHoursOfMonth = document.getElementById("nbHoursOfMonth");
     const regex = createDateRegex(chosenDate);
     let sumHours = CalculateSumHours(FindLocalItems(regex)).sumHours
     let sumMinutes = CalculateSumHours(FindLocalItems(regex)).sumMinutes
-    let str = sumHours + " Heures et " + sumMinutes + " minute(s) pour le mois" 
+    let str = sumHours + " Heures et " + sumMinutes + " minute(s) pour le mois"
 
-    if(content != null){
+    if (content != null) {
         startHour.value = content.beginHour;
         finishHour.value = content.endHour;
     }
@@ -58,14 +58,14 @@ function PrintContent(content) {
     nbHoursOfMonth.innerHTML = str;
 }
 
-function FindLocalItems (query) {
+function FindLocalItems(query) {
     var i, results = [];
     for (i in localStorage) {
         if (localStorage.hasOwnProperty(i)) {
-        if (i.match(query) || (!query && typeof i === 'string')) {
-            value = JSON.parse(localStorage.getItem(i));
-            results.push({key:i,val:value});
-        }
+            if (i.match(query) || (!query && typeof i === 'string')) {
+                value = JSON.parse(localStorage.getItem(i));
+                results.push({ key: i, val: value });
+            }
         }
     }
     return results;
@@ -78,13 +78,13 @@ function TimeDifference(startTime, endTime, lunch, dinner) {
     let pauseDuration = 0;
 
     //Déterminer la durée de pause
-    if(lunch && dinner){
-        pauseDuration  = 45;
+    if (lunch && dinner) {
+        pauseDuration = 45;
     }
-    else if(lunch){
+    else if (lunch) {
         pauseDuration = 15;
     }
-    else if(dinner){
+    else if (dinner) {
         pauseDuration = 30;
     }
 
@@ -108,26 +108,26 @@ function TimeDifference(startTime, endTime, lunch, dinner) {
     return { hours, minutes };
 }
 
-function CalculateSumHours(dates){
+function CalculateSumHours(dates) {
     let sumHours = 0;
     let sumMinutes = 0;
     let tmp;
 
-    for(let i = 0;i < dates.length;i++){
+    for (let i = 0; i < dates.length; i++) {
         sumHours += dates[i].val.nbHours.hours;
         sumMinutes += dates[i].val.nbHours.minutes;
     }
-    
+
     //on calcule le nombre de minute qui restent
-    tmp = sumMinutes%60;
+    tmp = sumMinutes % 60;
 
     //On convertit les minutes en heures
-    sumHours += Math.floor(sumMinutes/60);
+    sumHours += Math.floor(sumMinutes / 60);
 
     //On donne le reste des minutes à sumMinutes
     sumMinutes = tmp;
 
-    return {sumHours, sumMinutes};
+    return { sumHours, sumMinutes };
 }
 
 function createDateRegex(chosenDate) {
