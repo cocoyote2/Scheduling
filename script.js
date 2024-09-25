@@ -88,8 +88,6 @@ function TimeDifference(startTime, endTime, lunch, dinner) {
         pauseDuration = 30;
     }
 
-    console.log(pauseDuration);
-
     // Calculer la différence en millisecondes
     let diff = end - start;
 
