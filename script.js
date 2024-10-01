@@ -33,20 +33,26 @@ submitButton.addEventListener("click", () => {
   let finishHour = document.getElementById("end").value;
   let lunch = document.getElementById("lunch").checked;
   let dinner = document.getElementById("dinner").checked;
+  let data = [];
 
   let shift = {
+    date: chosenDate,
     beginHour: startHour,
     endHour: finishHour,
     nbHours: TimeDifference(startHour, finishHour, lunch, dinner),
   };
 
-  jsonContent = JSON.stringify(shift);
+  data.push(shift);
 
-  localStorage.setItem(chosenDate, jsonContent);
+  jsonContent = JSON.stringify(data);
 
-  let content = JSON.parse(localStorage.getItem(chosenDate));
+  localStorage.setItem("data", jsonContent);
 
-  PrintContent(content);
+  let content = JSON.parse(localStorage.getItem("data"));
+
+  let item = FindSpecificItem(content, chosenDate);
+
+  PrintContent(item);
 });
 
 function PrintContent(content) {
@@ -75,6 +81,12 @@ function FindLocalItems(query) {
     }
   }
   return results;
+}
+
+function FindSpecificItem(data, date){
+  const res = data.find((obj) => obj.date == date);
+
+  return res; 
 }
 
 function TimeDifference(startTime, endTime, lunch, dinner) {
@@ -175,8 +187,6 @@ function CreateEl(element) {
       }).format(currDate.setMonth(i))
     );
 
-    console.log(stringMonth);
-
     option.value = i;
     option.textContent = stringMonth;
 
@@ -185,7 +195,6 @@ function CreateEl(element) {
 })();
 
 function filterSearch(month, year) {}
-
 //TODO : Put an array of objects into the localStorage
 //TODO : 2 select avec mois et année et afficher le nombre d'heures sur le mois et l'année sélectionnés
 //IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé.
