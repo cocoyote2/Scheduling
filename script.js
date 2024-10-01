@@ -187,5 +187,7 @@ function CreateEl(element) {
 })();
 
 function filterSearch(month, year) {}
+
+//TODO : Put an array of objects into the localStorage
 //TODO : 2 select avec mois et année et afficher le nombre d'heures sur le mois et l'année sélectionnés
 //IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé.
