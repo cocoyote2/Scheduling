@@ -1,3 +1,6 @@
+//TODO : Do all the verifications (hours etc...)
+//IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé. (remplacer date par heure)
+
 const calendar = document.getElementById("date");
 const submitButton = document.getElementById("add");
 const beginHour = document.getElementById("begin");
@@ -8,9 +11,9 @@ const nbHoursOfMonth = document.getElementById("nbHoursOfMonth");
 const filterYear = document.getElementById("filterYear");
 const filterMonth = document.getElementById("filterMonth");
 const searchButton = document.getElementById("searchButton");
-let chosenDate;
-
 const CURRENT_DATE = new Date();
+let chosenDate;
+let data;
 
 //localStorage.clear();
 
@@ -21,11 +24,12 @@ calendar.addEventListener("change", () => {
   let date = new Date(calendar.value);
   chosenDate = date.toLocaleDateString();
 
-  let content = JSON.parse(localStorage.getItem(chosenDate));
+  data =
+    JSON.parse(localStorage.getItem("data")) != null
+      ? JSON.parse(localStorage.getItem("data"))
+      : [];
 
-  if (content != null) {
-    PrintContent(content);
-  }
+  PrintContent(FindSpecificItem(data, chosenDate));
 });
 
 submitButton.addEventListener("click", () => {
@@ -33,7 +37,10 @@ submitButton.addEventListener("click", () => {
   let finishHour = document.getElementById("end").value;
   let lunch = document.getElementById("lunch").checked;
   let dinner = document.getElementById("dinner").checked;
-  let data = [];
+  data =
+    JSON.parse(localStorage.getItem("data")) != null
+      ? JSON.parse(localStorage.getItem("data"))
+      : [];
 
   let shift = {
     date: chosenDate,
@@ -48,45 +55,57 @@ submitButton.addEventListener("click", () => {
 
   localStorage.setItem("data", jsonContent);
 
-  let content = JSON.parse(localStorage.getItem("data"));
-
-  let item = FindSpecificItem(content, chosenDate);
-
-  PrintContent(item);
+  PrintContent(shift);
 });
 
-function PrintContent(content) {
-  const regex = createDateRegex(chosenDate);
-  let sumHours = CalculateSumHours(FindLocalItems(regex)).sumHours;
-  let sumMinutes = CalculateSumHours(FindLocalItems(regex)).sumMinutes;
-  let str = sumHours + " Heures et " + sumMinutes + " minute(s) pour le mois";
+searchButton.addEventListener("click", (ev) => {
+  ev.preventDefault();
+  let month = filterMonth.value;
+  let year = filterYear.value;
+  let searchedDate = new Date(year, month, 1);
 
-  if (content != null) {
-    startHour.value = content.beginHour;
-    finishHour.value = content.endHour;
+  data =
+    JSON.parse(localStorage.getItem("data")) != null
+      ? JSON.parse(localStorage.getItem("data"))
+      : [];
+  //On doit faire la somme de toutes les heures qui correspondent à la date
+  let res = CalculateSumHours(FindLocalItems(searchedDate));
+
+  nbHoursOfMonth.innerText = `${res.sumHours} Heure(s) et ${res.sumMinutes} Minute(s)`;
+});
+
+//PrintContent takes an object that corresponds to a date
+function PrintContent(shift) {
+  if (shift != null) {
+    startHour.value = shift.beginHour;
+    finishHour.value = shift.endHour;
+  } else {
+    startHour.value = "00:00";
+    endHour.value = "00:00";
   }
-
-  nbHoursOfMonth.textContent = str;
 }
 
-function FindLocalItems(query) {
-  var i,
-    results = [];
-  for (i in localStorage) {
-    if (localStorage.hasOwnProperty(i)) {
-      if (i.match(query) || (!query && typeof i === "string")) {
-        value = JSON.parse(localStorage.getItem(i));
-        results.push({ key: i, val: value });
-      }
+function FindLocalItems(date) {
+  let i;
+  let res = [];
+
+  //On parcourt le tableau à la recherche des bon objets pour les jours
+  for (i = 0; i < data.length; i++) {
+    const currDateString = data[i].date;
+    const [currDay, currMonth, currYear] = currDateString.split("/");
+
+    if (currMonth == date.getMonth() + 1 && currYear == date.getFullYear()) {
+      res.push(data[i]);
     }
   }
-  return results;
+
+  return res;
 }
 
-function FindSpecificItem(data, date){
+function FindSpecificItem(data, date) {
   const res = data.find((obj) => obj.date == date);
 
-  return res; 
+  return res;
 }
 
 function TimeDifference(startTime, endTime, lunch, dinner) {
@@ -104,8 +123,8 @@ function TimeDifference(startTime, endTime, lunch, dinner) {
     pauseDuration = 30;
   }
 
-    // Calculer la différence en millisecondes
-    let diff = end - start;
+  // Calculer la différence en millisecondes
+  let diff = end - start;
 
   // Si l'heure de fin est avant l'heure de début, on considère que l'heure de fin est le jour suivant
   if (diff < 0) {
@@ -122,16 +141,15 @@ function TimeDifference(startTime, endTime, lunch, dinner) {
   return { hours, minutes };
 }
 
-function CalculateSumHours(dates) {
+function CalculateSumHours(tab) {
   let sumHours = 0;
   let sumMinutes = 0;
   let tmp;
 
-  for (let i = 0; i < dates.length; i++) {
-    sumHours += dates[i].val.nbHours.hours;
-    sumMinutes += dates[i].val.nbHours.minutes;
+  for (let i = 0; i < tab.length; i++) {
+    sumHours += tab[i].nbHours.hours;
+    sumMinutes += tab[i].nbHours.minutes;
   }
-
   //on calcule le nombre de minute qui restent
   tmp = sumMinutes % 60;
 
@@ -142,19 +160,6 @@ function CalculateSumHours(dates) {
   sumMinutes = tmp;
 
   return { sumHours, sumMinutes };
-}
-
-function createDateRegex(chosenDate) {
-  // Extraire le mois et l'année de la variable chosenDate (supposée être un objet Date)
-  const [dayStr, monthStr, yearStr] = chosenDate.split("/");
-  const date = new Date(yearStr, monthStr - 1, dayStr);
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() donne les mois de 0 (janvier) à 11 (décembre)
-  const year = date.getFullYear();
-
-  // Construire dynamiquement la regex en utilisant les variables du mois et de l'année
-  const regex = new RegExp(`^(0[1-9]|[12][0-9]|30)\\/${month}\\/${year}$`);
-
-  return regex;
 }
 
 (function GenerateYearsForFiltering() {
@@ -193,8 +198,3 @@ function CreateEl(element) {
     filterMonth.appendChild(option);
   }
 })();
-
-function filterSearch(month, year) {}
-//TODO : Put an array of objects into the localStorage
-//TODO : 2 select avec mois et année et afficher le nombre d'heures sur le mois et l'année sélectionnés
-//IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé.

@@ -9,3 +9,8 @@ On doit pouvoir modifier et supprimer un jour.
 Donc, liste déroulante pour chaque jour avec jour chômage ou maladie ou vacances.
 
 Système de connexion ? ou alors localStorage pour chaque utilisateur -> se renseigner
+
+
+1/10/24 : changed the way I store my data
+
+5/10/24 : adapt my functions to the previous change + add a filter functionality
