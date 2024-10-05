@@ -1,6 +1,5 @@
 //TODO : Do all the verifications (hours etc...)
-//IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé. (remplacer date par heure)
-
+//IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé. (remplacer date par heure) ????
 const calendar = document.getElementById("date");
 const submitButton = document.getElementById("add");
 const beginHour = document.getElementById("begin");
@@ -19,7 +18,7 @@ let data;
 
 calendar.addEventListener("change", () => {
   beginHour.value = "00:00";
-  endHour.value = "00:00";
+  endHour.value = "00:00"; 
 
   let date = new Date(calendar.value);
   chosenDate = date.toLocaleDateString();
@@ -29,18 +28,26 @@ calendar.addEventListener("change", () => {
       ? JSON.parse(localStorage.getItem("data"))
       : [];
 
-  PrintContent(FindSpecificItem(data, chosenDate));
+  PrintContent(FindSpecificItem(chosenDate));
 });
 
 submitButton.addEventListener("click", () => {
+  let check = FindSpecificItem(chosenDate) == undefined;
   let startHour = document.getElementById("begin").value;
   let finishHour = document.getElementById("end").value;
   let lunch = document.getElementById("lunch").checked;
   let dinner = document.getElementById("dinner").checked;
+  
   data =
     JSON.parse(localStorage.getItem("data")) != null
       ? JSON.parse(localStorage.getItem("data"))
       : [];
+
+  if(startHour > finishHour){
+    let tmp = startHour;
+    startHour = finishHour;
+    finishHour = tmp;
+  }
 
   let shift = {
     date: chosenDate,
@@ -49,11 +56,14 @@ submitButton.addEventListener("click", () => {
     nbHours: TimeDifference(startHour, finishHour, lunch, dinner),
   };
 
-  data.push(shift);
+  if(check && (startHour != finishHour)){
+    data.push(shift);
 
-  jsonContent = JSON.stringify(data);
+    jsonContent = JSON.stringify(data);
 
-  localStorage.setItem("data", jsonContent);
+    localStorage.setItem("data", jsonContent);
+    console.log("fait");
+  }
 
   PrintContent(shift);
 });
@@ -102,7 +112,7 @@ function FindLocalItems(date) {
   return res;
 }
 
-function FindSpecificItem(data, date) {
+function FindSpecificItem(date) {
   const res = data.find((obj) => obj.date == date);
 
   return res;
