@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Horaire</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+
+  <body>
+    <h1>Horaire</h1>
+    <div id="selection">
+      <input type="date" id="date" />
+      <label for="begin">Démarrage : </label>
+      <input type="time" id="begin" />
+      <label for="end">Fin : </label>
+      <input type="time" id="end" />
+      <input type="checkbox" id="lunch" />
+      <label for="lunch">Déjeuner</label>
+      <input type="checkbox" id="dinner" />
+      <label for="dinner">Dîner</label>
+      <button id="add">Ajouter</button>
+    </div>
+
+    <div id="filtering">
+      <form id="filterMonthYear">
+        <select id="filterMonth"></select>
+
+        <select id="filterYear"></select>
+
+        <button id="searchButton">Rechercher</button>
+      </form>
+    </div>
+
+    <div id="content">
+      <p id="nbHoursOfMonth"></p>
+    </div>
+  </body>
+</html>
