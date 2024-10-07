@@ -5,3 +5,7 @@ Scheduling is an application that allows the user to encode their shift for thei
 
 ## Issues
 - CSS can be upgraded
+
+## Ideas
+- Add a functionnality to delete an entry
+- Add a functionnality to update an entry
