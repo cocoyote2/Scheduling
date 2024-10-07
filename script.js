@@ -101,8 +101,6 @@ function PrintContent(shift) {
 function UpdateData(elem, dataTab){
   const index = dataTab.findIndex((currObj) => currObj.date == elem.date);
 
-  console.log(index);
-
   if(index > -1){
     dataTab[index] = elem;
   }else{
