@@ -10,6 +10,7 @@ const nbHoursOfMonth = document.getElementById("nbHoursOfMonth");
 const filterYear = document.getElementById("filterYear");
 const filterMonth = document.getElementById("filterMonth");
 const searchButton = document.getElementById("searchButton");
+const removeButton = document.getElementById("removeButton");
 const CURRENT_DATE = new Date();
 let chosenDate;
 let data;
@@ -23,10 +24,7 @@ calendar.addEventListener("change", () => {
   let date = new Date(calendar.value);
   chosenDate = date.toLocaleDateString();
 
-  data =
-    JSON.parse(localStorage.getItem("data")) != null
-      ? JSON.parse(localStorage.getItem("data"))
-      : [];
+  data = GetData();
 
   PrintContent(FindSpecificItem(chosenDate));
 });
@@ -38,10 +36,7 @@ submitButton.addEventListener("click", () => {
   let lunch = document.getElementById("lunch").checked;
   let dinner = document.getElementById("dinner").checked;
 
-  data =
-    JSON.parse(localStorage.getItem("data")) != null
-      ? JSON.parse(localStorage.getItem("data"))
-      : [];
+  data = GetData();
 
   if (startHour > finishHour) {
     let tmp = startHour;
@@ -59,9 +54,7 @@ submitButton.addEventListener("click", () => {
   if (check && startHour != finishHour) {
     data.push(shift);
 
-    jsonContent = JSON.stringify(data);
-
-    localStorage.setItem("data", jsonContent);
+    AddToLocalStorage(data);
   }
 
   PrintContent(shift);
@@ -82,6 +75,24 @@ searchButton.addEventListener("click", (ev) => {
 
   nbHoursOfMonth.innerText = `${res.sumHours} Heure(s) et ${res.sumMinutes} Minute(s)`;
 });
+
+removeButton.addEventListener("click", () => {
+  data = DeleteElement(FindSpecificItem(chosenDate), data);
+
+  AddToLocalStorage(data);
+});
+
+function AddToLocalStorage(dataTab) {
+  const jsonContent = JSON.stringify(dataTab);
+
+  localStorage.setItem("data", jsonContent);
+}
+
+function GetData() {
+  return JSON.parse(localStorage.getItem("data")) != null
+    ? JSON.parse(localStorage.getItem("data"))
+    : [];
+}
 
 //PrintContent takes an object that corresponds to a date
 function PrintContent(shift) {
@@ -207,3 +218,13 @@ function CreateEl(element) {
     filterMonth.appendChild(option);
   }
 })();
+
+function DeleteElement(obj, dataTab) {
+  const index = dataTab.findIndex((currObj) => currObj == obj);
+
+  if (index > -1) {
+    dataTab.splice(index, 1);
+  }
+
+  return dataTab;
+}
