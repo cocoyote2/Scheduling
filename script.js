@@ -62,7 +62,6 @@ submitButton.addEventListener("click", () => {
     jsonContent = JSON.stringify(data);
 
     localStorage.setItem("data", jsonContent);
-    console.log("fait");
   }
 
   PrintContent(shift);
