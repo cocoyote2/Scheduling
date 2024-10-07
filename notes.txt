@@ -14,3 +14,7 @@ Système de connexion ? ou alors localStorage pour chaque utilisateur -> se rens
 1/10/24 : changed the way I store my data
 
 5/10/24 : adapt my functions to the previous change + add a filter functionality
+
+6/10/24 : added a delete function + making functions to make my life easier
+
+7/10/24 : refactoring my code + adding an update function + deleting comments and console.log()
