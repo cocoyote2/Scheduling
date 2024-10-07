@@ -8,62 +8,101 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    flex-direction: column; /* Ajouté pour disposer verticalement */
+    flex-direction: column; /* Pour disposer verticalement */
     color: #333;
+    transition: background-color 0.3s ease;
 }
 
+/* Style de la section sélection */
 #selection {
     background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     max-width: 400px;
     width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Effet hover sur la section */
+#selection:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Labels des champs */
 #selection label {
     font-weight: bold;
     margin-right: 10px;
+    color: #333;
 }
 
+/* Champs de date et d'heure */
 #selection input[type="date"],
 #selection input[type="time"] {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     width: 100%;
+    box-sizing: border-box; /* Pour s'assurer que le padding est pris en compte */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #selection input[type="date"]:focus,
 #selection input[type="time"]:focus {
     outline: none;
     border-color: #0066cc;
-    box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.3);
 }
 
-button#add {
-    padding: 10px 20px;
+/* Checkboxes */
+#selection input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+#selection label[for="lunch"],
+#selection label[for="dinner"] {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Bouton Ajouter */
+button#add, 
+button#removeButton {
+    padding: 12px 20px;
     background-color: #0066cc;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
     width: 100%;
 }
 
-button#add:hover {
+button#add:hover,
+button#removeButton:hover {
     background-color: #005bb5;
+    transform: translateY(-2px);
 }
 
+/* Différenciation du bouton Supprimer */
+button#removeButton {
+    background-color: #cc3300;
+}
+
+button#removeButton:hover {
+    background-color: #b52d00;
+}
+
+/* Section du contenu */
 #content {
-    margin-top: 40px; /* Augmente la marge pour plus d'espace */
+    margin-top: 50px; /* Augmente la marge pour plus d'espace */
     text-align: center;
     font-size: 18px;
     color: #0066cc;
@@ -72,4 +111,57 @@ button#add:hover {
 #nbHoursOfMonth {
     font-size: 24px;
     font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Filtrage du mois et de l'année */
+#filtering {
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#filterMonth, #filterYear {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#searchButton {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#searchButton:hover {
+    background-color: #218838;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    #selection, #filtering {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    button#add, button#removeButton {
+        font-size: 14px;
+    }
+
+    #filterMonth, #filterYear {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #searchButton {
+        width: 100%;
+    }
 }

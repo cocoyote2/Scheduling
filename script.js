@@ -116,7 +116,7 @@ function FindLocalItems(date, dataTab) {
   //On parcourt le tableau à la recherche des bon objets pour les jours
   for (i = 0; i < dataTab.length; i++) {
     const currDateString = dataTab[i].date;
-    const [currDay, currMonth, currYear] = currDateString.split("/");
+    const [, currMonth, currYear] = currDateString.split("/");
 
     if (currMonth == date.getMonth() + 1 && currYear == date.getFullYear()) {
       res.push(dataTab[i]);
