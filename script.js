@@ -18,7 +18,7 @@ let data;
 
 calendar.addEventListener("change", () => {
   beginHour.value = "00:00";
-  endHour.value = "00:00"; 
+  endHour.value = "00:00";
 
   let date = new Date(calendar.value);
   chosenDate = date.toLocaleDateString();
@@ -37,13 +37,13 @@ submitButton.addEventListener("click", () => {
   let finishHour = document.getElementById("end").value;
   let lunch = document.getElementById("lunch").checked;
   let dinner = document.getElementById("dinner").checked;
-  
+
   data =
     JSON.parse(localStorage.getItem("data")) != null
       ? JSON.parse(localStorage.getItem("data"))
       : [];
 
-  if(startHour > finishHour){
+  if (startHour > finishHour) {
     let tmp = startHour;
     startHour = finishHour;
     finishHour = tmp;
@@ -56,7 +56,7 @@ submitButton.addEventListener("click", () => {
     nbHours: TimeDifference(startHour, finishHour, lunch, dinner),
   };
 
-  if(check && (startHour != finishHour)){
+  if (check && startHour != finishHour) {
     data.push(shift);
 
     jsonContent = JSON.stringify(data);
