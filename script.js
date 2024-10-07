@@ -1,4 +1,4 @@
-//TODO : Do all the verifications (hours etc...)
+//TODO : Passing the table as a parameter in functions
 //IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé. (remplacer date par heure) ????
 const calendar = document.getElementById("date");
 const submitButton = document.getElementById("add");
@@ -15,8 +15,6 @@ const CURRENT_DATE = new Date();
 let chosenDate;
 let data;
 
-//localStorage.clear();
-
 calendar.addEventListener("change", () => {
   beginHour.value = "00:00";
   endHour.value = "00:00";
@@ -26,11 +24,10 @@ calendar.addEventListener("change", () => {
 
   data = GetData();
 
-  PrintContent(FindSpecificItem(chosenDate));
+  PrintContent(FindSpecificItem(chosenDate, data));
 });
 
 submitButton.addEventListener("click", () => {
-  let check = FindSpecificItem(chosenDate) == undefined;
   let startHour = document.getElementById("begin").value;
   let finishHour = document.getElementById("end").value;
   let lunch = document.getElementById("lunch").checked;
@@ -51,8 +48,8 @@ submitButton.addEventListener("click", () => {
     nbHours: TimeDifference(startHour, finishHour, lunch, dinner),
   };
 
-  if (check && startHour != finishHour) {
-    data.push(shift);
+  if (startHour != finishHour) {
+    data = UpdateData(shift, data);
 
     AddToLocalStorage(data);
   }
@@ -66,18 +63,15 @@ searchButton.addEventListener("click", (ev) => {
   let year = filterYear.value;
   let searchedDate = new Date(year, month, 1);
 
-  data =
-    JSON.parse(localStorage.getItem("data")) != null
-      ? JSON.parse(localStorage.getItem("data"))
-      : [];
+  data = GetData();
   //On doit faire la somme de toutes les heures qui correspondent à la date
-  let res = CalculateSumHours(FindLocalItems(searchedDate));
+  let res = CalculateSumHours(FindLocalItems(searchedDate, data));
 
   nbHoursOfMonth.innerText = `${res.sumHours} Heure(s) et ${res.sumMinutes} Minute(s)`;
 });
 
 removeButton.addEventListener("click", () => {
-  data = DeleteElement(FindSpecificItem(chosenDate), data);
+  data = DeleteElement(FindSpecificItem(chosenDate, data), data);
 
   AddToLocalStorage(data);
 });
@@ -94,7 +88,6 @@ function GetData() {
     : [];
 }
 
-//PrintContent takes an object that corresponds to a date
 function PrintContent(shift) {
   if (shift != null) {
     startHour.value = shift.beginHour;
@@ -105,25 +98,39 @@ function PrintContent(shift) {
   }
 }
 
-function FindLocalItems(date) {
+function UpdateData(elem, dataTab){
+  const index = dataTab.findIndex((currObj) => currObj.date == elem.date);
+
+  console.log(index);
+
+  if(index > -1){
+    dataTab[index] = elem;
+  }else{
+    dataTab.push(elem);
+  }
+
+  return dataTab;
+}
+
+function FindLocalItems(date, dataTab) {
   let i;
   let res = [];
 
   //On parcourt le tableau à la recherche des bon objets pour les jours
-  for (i = 0; i < data.length; i++) {
-    const currDateString = data[i].date;
+  for (i = 0; i < dataTab.length; i++) {
+    const currDateString = dataTab[i].date;
     const [currDay, currMonth, currYear] = currDateString.split("/");
 
     if (currMonth == date.getMonth() + 1 && currYear == date.getFullYear()) {
-      res.push(data[i]);
+      res.push(dataTab[i]);
     }
   }
 
   return res;
 }
 
-function FindSpecificItem(date) {
-  const res = data.find((obj) => obj.date == date);
+function FindSpecificItem(date, dataTab) {
+  const res = dataTab.find((obj) => obj.date == date);
 
   return res;
 }
