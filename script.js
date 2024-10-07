@@ -1,4 +1,3 @@
-//TODO : Passing the table as a parameter in functions
 //IDEA : Ajouter une date de fin à la sélection : au choix de la date, yaura un input avec la date de fin qui sera = à la date de départ et qui pourra être changé. (remplacer date par heure) ????
 const calendar = document.getElementById("date");
 const submitButton = document.getElementById("add");
